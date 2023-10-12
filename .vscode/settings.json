@@ -1,3 +1,4 @@
 {
-  "al.showHomeAtStartup": "Always"
+  "al.showHomeAtStartup": "Always",
+  "al.enableCodeActions": true
 }
