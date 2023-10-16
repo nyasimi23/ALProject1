@@ -41,5 +41,4 @@ codeunit 50120  "Customer Overview Mgmt"
         GLEntry: Record "G/L Entry";
         NextEntryNo : Integer;
 
-
 }

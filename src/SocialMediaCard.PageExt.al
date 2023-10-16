@@ -83,31 +83,11 @@ pageextension 50103 CustomerCard extends "Customer Card"
 
     
 
-    procedure UpdateCreditLimit(var NewCreditLimit: Decimal)
-    begin
-        NewCreditLimit := Round(NewCreditLimit, 10000);
-        Rec.Validate("Credit Limit (LCY)", NewCreditLimit);
-        Rec.Modify();
-    end;
-
-
-    procedure CalculateCreditLimit(): Decimal
-    var
-        Customer: Record Customer;
-    begin
-        Customer := Rec;
-        Customer.SetRange("Date Filter", CalcDate('<-12M>', WorkDate()), WorkDate());
-        Customer.CalcFields("Sales (LCY)", "Balance (LCY)");
-        exit(Round(Customer."Sales (LCY)" * 0.5));
-    end;
-
-
-
     local procedure CallUpdateCreditLimit()
     var
         CreditLimitCalculated, CreditLimitActual : Decimal;
     begin
-        CreditLimitCalculated := CalculateCreditLimit();
+        CreditLimitCalculated := Rec.CalculateCreditLimit();
         if CreditLimitCalculated = Rec."Credit Limit (LCY)" then begin
             Message(CreditLimitUpToDateTxt);
             exit;
@@ -118,7 +98,7 @@ pageextension 50103 CustomerCard extends "Customer Card"
                 exit;
 
         CreditLimitActual := CreditLimitCalculated;
-        UpdateCreditLimit(CreditLimitActual);
+        Rec.UpdateCreditLimit(CreditLimitActual);
         if CreditLimitActual <> CreditLimitCalculated then
             Message(CreditLimitROundedTxt, CreditLimitActual);
     end;
